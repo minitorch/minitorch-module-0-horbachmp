@@ -25,7 +25,7 @@ from minitorch.operators import (
     sigmoid,
 )
 
-from .strategies import assert_close, small_floats
+from .strategies import assert_close, small_floats, very_small_floats, small_floats1, small_floats2
 
 # ## Task 0.1 Basic hypothesis tests.
 
@@ -97,9 +97,10 @@ def test_eq(a: float) -> None:
 # that ensure that your operators obey basic
 # mathematical rules.
 
+# small_floats_02 = [random.uniform(-10, 10) for _ in range(10)]
 
 @pytest.mark.task0_2
-@given(small_floats)
+@given(very_small_floats)
 def test_sigmoid(a: float) -> None:
     """Check properties of the sigmoid function, specifically
     * It is always between 0.0 and 1.0.
@@ -107,41 +108,74 @@ def test_sigmoid(a: float) -> None:
     * It crosses 0 at 0.5
     * It is  strictly increasing.
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    assert 0.0 <= sigmoid(a) <= 1.0
+
+    assert_close(1 - sigmoid(a), sigmoid(neg(a)))
+
+    assert_close(sigmoid(0.0), 0.5)
+
+    assert_close(lt(sigmoid(a - 1e-1), sigmoid(a)), 1.0)
 
 
 @pytest.mark.task0_2
-@given(small_floats, small_floats, small_floats)
+@given(small_floats, small_floats1, small_floats2)
 def test_transitive(a: float, b: float, c: float) -> None:
     """Test the transitive property of less-than (a < b and b < c implies a < c)"""
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    a, b, c = sorted([a, b, c])
+    if a < b:
+        assert lt(a, b)
+        if b < c:
+            assert lt(b, c)
+            assert lt(a, c)
+        else:
+            assert lt(c, b)
+            if a < c:
+                assert lt(a, c)
+            else:
+                assert lt(c, a)
+    else:
+        assert lt(b, a)
+        if a < c:
+            assert lt(a, c)
+            assert lt(b, c)
+        else:
+            assert lt(c, a)
+            if b < c:
+                assert lt(b, c)
+            else:
+                assert lt(c, b)
 
 
 @pytest.mark.task0_2
-def test_symmetric() -> None:
+@given(small_floats, very_small_floats)
+def test_symmetric(a: float, b: float) -> None:
     """Write a test that ensures that :func:`minitorch.operators.mul` is symmetric, i.e.
     gives the same value regardless of the order of its input.
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    assert abs(minitorch.operators.mul(a, b) - minitorch.operators.mul(b, a)) < 1e-4
 
 
 @pytest.mark.task0_2
-def test_distribute() -> None:
+@given(small_floats, very_small_floats, small_floats1)
+def test_distribute(x: float, y: float, z: float) -> None:
     r"""Write a test that ensures that your operators distribute, i.e.
     :math:`z \times (x + y) = z \times x + z \times y`
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    first = minitorch.operators.mul(z, minitorch.operators.add(x, y))
+    second = minitorch.operators.add(minitorch.operators.mul(z, x), minitorch.operators.mul(z, y))
+    assert abs(first - second) < 1e-4
 
 
 @pytest.mark.task0_2
-def test_other() -> None:
+@given(small_floats, small_floats1)
+def test_other(x: float, y: float) -> None:
     """Write a test that ensures some other property holds for your functions."""
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    assert minitorch.operators.id(x) == x
+
+    assert minitorch.operators.eq(minitorch.operators.add(x, y), minitorch.operators.add(y, x))
+
+    if x > 0:
+        assert minitorch.operators.is_close(minitorch.operators.exp(minitorch.operators.log(x)), x)
 
 
 # ## Task 0.3  - Higher-order functions
@@ -168,8 +202,9 @@ def test_sum_distribute(ls1: List[float], ls2: List[float]) -> None:
     """Write a test that ensures that the sum of `ls1` plus the sum of `ls2`
     is the same as the sum of each element of `ls1` plus each element of `ls2`.
     """
-    # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+    first = minitorch.operators.sum(ls1) + minitorch.operators.sum(ls2)
+    second = minitorch.operators.sum(addLists(ls1, ls2))
+    assert minitorch.operators.eq(first, second)
 
 
 @pytest.mark.task0_3
