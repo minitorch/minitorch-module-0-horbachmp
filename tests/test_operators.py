@@ -210,7 +210,6 @@ def test_sum_distribute(ls1: List[float], ls2: List[float]) -> None:
     """
     first = minitorch.operators.sum(ls1) + minitorch.operators.sum(ls2)
     second= minitorch.operators.sum(addLists(ls1, ls2))
-
     assert minitorch.operators.eq(first, second)
 
 
