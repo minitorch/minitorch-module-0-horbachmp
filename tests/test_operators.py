@@ -1,7 +1,5 @@
 from typing import Callable, List, Tuple
 
-import random
-
 import pytest
 from hypothesis import given
 from hypothesis.strategies import lists
@@ -123,7 +121,6 @@ def test_sigmoid(a: float) -> None:
 @given(small_floats, small_floats1, small_floats2)
 def test_transitive(a: float, b: float, c: float) -> None:
     """Test the transitive property of less-than (a < b and b < c implies a < c)"""
-    print(a,b,c)
     a, b, c = sorted([a, b, c])
     if a < b:
         assert lt(a, b)
@@ -135,7 +132,7 @@ def test_transitive(a: float, b: float, c: float) -> None:
             if a < c:
                 assert lt(a, c)
             else:
-                assert lt(c, a) 
+                assert lt(c, a)
     else:
         assert lt(b, a)
         if a < c:
@@ -146,12 +143,12 @@ def test_transitive(a: float, b: float, c: float) -> None:
             if b < c:
                 assert lt(b, c)
             else:
-                assert lt(c, b) 
+                assert lt(c, b)
 
 
 @pytest.mark.task0_2
 @given(small_floats, very_small_floats)
-def test_symmetric(a:float, b:float) -> None:
+def test_symmetric(a: float, b: float) -> None:
     """Write a test that ensures that :func:`minitorch.operators.mul` is symmetric, i.e.
     gives the same value regardless of the order of its input.
     """
@@ -160,19 +157,18 @@ def test_symmetric(a:float, b:float) -> None:
 
 @pytest.mark.task0_2
 @given(small_floats, very_small_floats, small_floats1)
-def test_distribute(x:float, y:float, z:float) -> None:
+def test_distribute(x: float, y: float, z: float) -> None:
     r"""Write a test that ensures that your operators distribute, i.e.
     :math:`z \times (x + y) = z \times x + z \times y`
     """
     first = minitorch.operators.mul(z, minitorch.operators.add(x, y))
-    second =  minitorch.operators.add(minitorch.operators.mul(z, x), minitorch.operators.mul(z, y))
+    second = minitorch.operators.add(minitorch.operators.mul(z, x), minitorch.operators.mul(z, y))
     assert abs(first - second) < 1e-4
-    
 
 
 @pytest.mark.task0_2
 @given(small_floats, small_floats1)
-def test_other(x: float, y:float) -> None:
+def test_other(x: float, y: float) -> None:
     """Write a test that ensures some other property holds for your functions."""
     assert minitorch.operators.id(x) == x
 
@@ -180,8 +176,6 @@ def test_other(x: float, y:float) -> None:
 
     if x > 0:
         assert minitorch.operators.is_close(minitorch.operators.exp(minitorch.operators.log(x)), x)
-
-    
 
 
 # ## Task 0.3  - Higher-order functions
@@ -209,7 +203,7 @@ def test_sum_distribute(ls1: List[float], ls2: List[float]) -> None:
     is the same as the sum of each element of `ls1` plus each element of `ls2`.
     """
     first = minitorch.operators.sum(ls1) + minitorch.operators.sum(ls2)
-    second= minitorch.operators.sum(addLists(ls1, ls2))
+    second = minitorch.operators.sum(addLists(ls1, ls2))
     assert minitorch.operators.eq(first, second)
 
 

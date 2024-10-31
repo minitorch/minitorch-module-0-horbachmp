@@ -51,13 +51,9 @@ from typing import Callable, Iterable
 # - prod: take the product of lists
 
 
-
 """
 Collection of the core mathematical operators used throughout the code base.
 """
-
-import math
-from typing import Callable, Iterable
 
 # ## Task 0.1
 #
@@ -93,7 +89,7 @@ def eq(x: float, y: float) -> float:
     "$f(x) =$ 1.0 if x is equal to y else 0.0"
     if abs(x - y) < 1e-8:
         return 1.0
-    return 0.0 
+    return 0.0
 
 
 def max(x: float, y: float) -> float:
@@ -107,7 +103,7 @@ def is_close(x: float, y: float) -> float:
     "$f(x) = |x - y| < 1e-2$"
     if abs(x - y) < 1e-2:
         return 1.0
-    return 0.0 
+    return 0.0
 
 
 def sigmoid(x: float) -> float:
@@ -133,7 +129,7 @@ def relu(x: float) -> float:
 
     (See https://en.wikipedia.org/wiki/Rectifier_(neural_networks) .)
     """
-    return max(0,x)
+    return max(0, x)
 
 
 EPS = 1e-6
@@ -156,7 +152,7 @@ def log_back(x: float, d: float) -> float:
 
 def inv(x: float) -> float:
     "$f(x) = 1/x$"
-    return 1.0/x
+    return 1.0 / x
 
 
 def inv_back(x: float, d: float) -> float:
@@ -194,7 +190,6 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
         for x in a:
             ans.append(fn(x))
         return ans
-    
     return fn_to_list
 
 
@@ -232,7 +227,6 @@ def zipWith(
 
 def addLists(ls1: Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
     "Add the elements of `ls1` and `ls2` using `zipWith` and `add`"
-    
     fn = zipWith(add)
     return fn(ls1, ls2)
 
