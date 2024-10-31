@@ -10,6 +10,9 @@ settings.load_profile("ci")
 
 small_ints = integers(min_value=1, max_value=3)
 small_floats = floats(min_value=-100, max_value=100, allow_nan=False)
+small_floats1 = floats(min_value=200, max_value=400, allow_nan=False)
+small_floats2 = floats(min_value=500, max_value=900, allow_nan=False)
+very_small_floats = floats(min_value=-10, max_value=10, allow_nan=False)
 med_ints = integers(min_value=1, max_value=20)
 
 
