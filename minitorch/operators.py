@@ -4,7 +4,6 @@ import math
 
 # ## Task 0.1
 from typing import Callable, Iterable
-import numpy as np
 
 #
 # Implementation of a prelude of elementary functions.
@@ -190,12 +189,19 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
         A function that takes a list, applies `fn` to each element, and returns a
          new list
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    def fn_to_list(a: Iterable[float]):
+        ans = []
+        for x in a:
+            ans.append(fn(x))
+        return ans
+    
+    return fn_to_list
 
 
 def negList(ls: Iterable[float]) -> Iterable[float]:
     "Use `map` and `neg` to negate each element in `ls`"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    fn = map(neg)
+    return fn(ls)
 
 
 def zipWith(
@@ -214,12 +220,21 @@ def zipWith(
          applying fn(x, y) on each pair of elements.
 
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    def fn_to_lists(a: Iterable[float], b: Iterable[float]):
+        new_arg = zip(a, b)
+        ans = []
+        for x in new_arg:
+            ans.append(fn(x[0], x[1]))
+        return ans
+
+    return fn_to_lists
 
 
 def addLists(ls1: Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
     "Add the elements of `ls1` and `ls2` using `zipWith` and `add`"
-    raise NotImplementedError("Need to include this file from past assignment.")
+    
+    fn = zipWith(add)
+    return fn(ls1, ls2)
 
 
 def reduce(
@@ -237,17 +252,25 @@ def reduce(
          $x_1 \ldots x_n$ and computes the reduction :math:`fn(x_3, fn(x_2,
          fn(x_1, x_0)))`
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    def reduce_inner(ls: Iterable[float]):
+        ans = start
+        for x in ls:
+            ans = fn(ans, x)
+        return ans
+
+    return reduce_inner
 
 
 def sum(ls: Iterable[float]) -> float:
     "Sum up a list using `reduce` and `add`."
-    raise NotImplementedError("Need to include this file from past assignment.")
+    fn = reduce(add, 0)
+    return fn(ls)
 
 
 def prod(ls: Iterable[float]) -> float:
     "Product of a list using `reduce` and `mul`."
-    raise NotImplementedError("Need to include this file from past assignment.")
+    fn = reduce(mul, 1)
+    return fn(ls)
 
 
 # TODO: Implement for Task 0.3.
